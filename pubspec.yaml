@@ -26,6 +26,7 @@ dependencies:
   bloc_pattern: ^2.3.2
   rxdart: ^0.22.6
   intl: ^0.16.0
+  flutter_calendar_carousel: ^1.4.9
 
 dev_dependencies:
   flutter_test:
