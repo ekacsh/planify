@@ -9,6 +9,7 @@ class DisciplinaTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(_disciplina);
     return InkWell(
       child: Padding(
           padding: EdgeInsets.all(8),

@@ -5,7 +5,7 @@ class Disciplina {
   Periodo periodo;
   String titulo;
   String docente;
-  List<Aula> aulas;
+  List<Aula> aulas = [];
   int faltas;
 
   Disciplina(
@@ -28,8 +28,9 @@ class Disciplina {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {
       "periodo": periodo.toMap(),
+      "titulo": titulo,
       "docente": docente,
-      "aulas": aulas.map((aula) => aula.toMap()),
+      "aulas": aulas.map((aula) => aula.toMap()).toList(),
       "faltas": faltas
     };
     if (id != null) map["_id"] = id;

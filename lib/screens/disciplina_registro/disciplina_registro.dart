@@ -1,17 +1,25 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:planify/bloc/subject_bloc.dart';
+
 import 'package:planify/bloc/add_aula_bloc.dart';
 import 'package:planify/models/disciplina.dart';
 import 'package:planify/screens/disciplina_view/components/AulaTile.dart';
-import 'package:planify/services/api_helper.dart';
 
 class DisciplinaRegistro extends StatefulWidget {
+
   @override
   _DisciplinaRegistroState createState() => _DisciplinaRegistroState();
 }
 
 class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
+
+  Disciplina _editedDisciplina = Disciplina();
+
+  final _tituloController = TextEditingController();
+  final _docentecontroller = TextEditingController();
+
   String nome;
   String professor;
   int hora = 10;
@@ -34,7 +42,8 @@ class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
         children: <Widget>[
-          TextField(
+          TextFormField(
+            controller: _tituloController,
             decoration: InputDecoration(
               labelText: "Disciplina",
               border: OutlineInputBorder(
@@ -50,18 +59,14 @@ class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
                 borderSide: BorderSide(color: Colors.black87, width: 2),
               ),
             ),
-            onChanged: (text) {
-              setState(() {
-                this.nome = text;
-              });
-            },
           ),
           SizedBox(
             height: 16,
           ),
-          TextField(
+          TextFormField(
+            controller: _docentecontroller,
             decoration: InputDecoration(
-              labelText: "Professor",
+              labelText: "Docente",
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(8),
@@ -75,17 +80,29 @@ class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
                 borderSide: BorderSide(color: Colors.black87, width: 2),
               ),
             ),
-            onChanged: (text) {
-              setState(() {
-                this.professor = text;
-              });
-            },
           ),
           SizedBox(
             height: 16,
           ),
+          Text("Aulas",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+          ListView.builder(
+            padding: EdgeInsets.all(8),
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: aulas.length,
+            itemBuilder: (context, index) => AulaTile(aulas[index]),
+          ),
           InkWell(
             borderRadius: BorderRadius.all(Radius.circular(8)),
+
+//            onTap: () {
+//              setState(() {
+//                aulas.add(Aula(local: "AT-9",
+//                    horarioInicio: Horario(8, 0),
+//                    horarioFim: Horario(10, 0),
+//                    diaSemana: 1));
+//              });
             onTap: () => showDialog(
               context: context,
               builder: (context) => AlertDialog(
@@ -174,28 +191,23 @@ class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
               ],
             ),
           ),
-          SizedBox(
-            height: 16,
-          ),
-          ListView.builder(
-            physics: ClampingScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: aulas.length,
-            itemBuilder: (context, index) => AulaTile(aulas[index]),
-          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.check),
+
         onPressed: () async {
-          await api.saveDisciplina(
-            Disciplina(
-              aulas: aulas,
-              titulo: nome,
-              periodo: Periodo(2019, 2),
-              faltas: 0,
-            ),
+          Disciplina d = Disciplina(
+            aulas: aulas,
+            titulo: _tituloController.text,
+            docente: _docentecontroller.text,
+            periodo: Periodo(2019, 2),
+            faltas: 0,
           );
+          BlocProvider
+              .getBloc<DisciplinaBloc>()
+              .inSave
+              .add(d);
           Navigator.pop(context);
         },
       ),

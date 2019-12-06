@@ -3,7 +3,7 @@ import 'package:planify/models/disciplina.dart';
 import 'package:planify/services/api_helper.dart';
 import 'package:rxdart/rxdart.dart';
 
-class DisciplinaBloc extends BlocBase {
+class AulaBloc extends BlocBase {
   ApiHelper api;
 
   List<Aula> _aulas;
@@ -14,9 +14,9 @@ class DisciplinaBloc extends BlocBase {
 
   final _aulasController = BehaviorSubject<List<Aula>>.seeded([]);
 
-  Stream get outDisciplinas => _aulasController.stream;
+  Stream get outAulas => _aulasController.stream;
 
-  DisciplinaBloc() {
+  AulaBloc() {
     api = ApiHelper();
     api.initDb();
 
