@@ -42,6 +42,30 @@ class DisciplinaView extends StatelessWidget {
                   _disciplina.docente,
                   style: TextStyle(fontSize: 18),
                 ),
+                Row(
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.remove),
+                      onPressed: () {
+                        if (_disciplina.faltas > 0) {
+                          _disciplina.faltas--;
+                        }
+                      },
+                    ),
+                    Text(
+                      "${_disciplina.faltas} falta${_disciplina.faltas > 1
+                          ? 's'
+                          : ''}",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: () {
+                        _disciplina.faltas++;
+                      },
+                    ),
+                  ],
+                ),
                 Container(
                   margin: EdgeInsets.only(bottom: 8, top: 16),
                   child: Text(

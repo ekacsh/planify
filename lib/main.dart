@@ -8,7 +8,7 @@ import 'package:planify/screens/home/home_screen.dart';
 void main() => runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     theme:
-    ThemeData(primaryColor: Color(0xffff1744), accentColor: Colors.white),
+    ThemeData(primaryColor: Color(0xffff1744)),
     home: BlocProvider(
       blocs: [
         Bloc((_) => TaskBloc()),
