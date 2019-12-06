@@ -1,5 +1,7 @@
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:planify/bloc/add_aula_bloc.dart';
 import 'package:planify/models/disciplina.dart';
 import 'package:planify/screens/disciplina_view/components/AulaTile.dart';
 import 'package:planify/services/api_helper.dart';
@@ -19,6 +21,8 @@ class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
   List<Aula> aulas = [];
 
   ApiHelper api = ApiHelper();
+
+  AddAulaBloc bloc = BlocProvider.getBloc<AddAulaBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -121,18 +125,18 @@ class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
                         IconButton(
                           icon: Icon(Icons.remove_circle_outline),
                           onPressed: () {
-                            setState(() {
-                              hora--;
-                            });
+                            bloc.decrement();
                           },
                         ),
-                        Text("${hora.toString().padLeft(2, '0')}:00 h"),
+                        StreamBuilder(
+                          stream: bloc.outHour,
+                          builder: (context, snapshot) => Text(
+                              "${snapshot.data.toString().padLeft(2, '0')}:00 h"),
+                        ),
                         IconButton(
                           icon: Icon(Icons.add_circle_outline),
                           onPressed: () {
-                            setState(() {
-                              hora++;
-                            });
+                            bloc.increment();
                           },
                         ),
                       ],
@@ -144,6 +148,7 @@ class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
                     child: Text("Adicionar"),
                     onPressed: () {
                       setState(() {
+                        hora = bloc.getHour();
                         aulas.add(
                           Aula(
                             diaSemana: 1,

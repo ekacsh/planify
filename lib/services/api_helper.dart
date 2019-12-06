@@ -22,7 +22,7 @@ class ApiHelper {
 
 //    Db db = new Db("mongodb://$user:$pwd@0.tcp.ngrok.io:12204/planify?authSource=admin&retryWrites=true&w=majority");
     Db db = new Db(
-        "mongodb://$user:$pwd@0.tcp.ngrok.io:12204/planify?authSource=admin&retryWrites=true&w=majority");
+        "mongodb://$user:$pwd@0.tcp.ngrok.io:14272/planify?authSource=admin&retryWrites=true&w=majority");
     await db.open();
     return db;
   }
@@ -31,16 +31,16 @@ class ApiHelper {
     final coll = (await db).collection("tarefas");
     final pipeline = AggregationPipelineBuilder()
         .addStage(Lookup.withPipeline(
-      from: "disciplinas",
-      let: {"id": Field('disciplinaId')},
-      pipeline: [
-        Match(Expr(Eq(Field("_id"), Var("id")))),
-        Project({"_id": 0, "disciplinaNome": Field("titulo")})
-      ],
-      as: "dName",
-    ))
+          from: "disciplinas",
+          let: {"id": Field('disciplinaId')},
+          pipeline: [
+            Match(Expr(Eq(Field("_id"), Var("id")))),
+            Project({"_id": 0, "disciplinaNome": Field("titulo")})
+          ],
+          as: "dName",
+        ))
         .addStage(ReplaceRoot(
-        MergeObjects([ArrayElemAt(Field("dName"), 0), Var("ROOT")])))
+            MergeObjects([ArrayElemAt(Field("dName"), 0), Var("ROOT")])))
         .addStage(Project({"dName": 0}))
         .build();
     final result = await coll.aggregateToStream(pipeline).toList();
