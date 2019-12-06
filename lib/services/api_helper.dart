@@ -20,6 +20,7 @@ class ApiHelper {
     String user = "user";
     String pwd = "user";
 
+//    Db db = new Db("mongodb://$user:$pwd@0.tcp.ngrok.io:12204/planify?authSource=admin&retryWrites=true&w=majority");
     Db db = new Db(
         "mongodb://$user:$pwd@10.0.2.2:27001/planify?authSource=admin&retryWrites=true&w=majority");
     await db.open();
@@ -27,11 +28,24 @@ class ApiHelper {
   }
 
   Future<List<Tarefa>> getMostRecentTarefas(int qnt) async {
-    final data = await (await db)
-        .collection("tarefas")
-        .find(where.sortBy("data", descending: false))
-        .toList();
-    return data.map((d) => Tarefa.fromMap(d)).toList();
+    final coll = (await db).collection("tarefas");
+    final pipeline = AggregationPipelineBuilder()
+        .addStage(Lookup.withPipeline(
+      from: "disciplinas",
+      let: {"id": Field('disciplinaId')},
+      pipeline: [
+        Match(Expr(Eq(Field("_id"), Var("id")))),
+        Project({"_id": 0, "disciplinaName": Field("titulo")})
+      ],
+      as: "dName",
+    ))
+        .addStage(ReplaceRoot(
+        MergeObjects([ArrayElemAt(Field("dName"), 0), Var("ROOT")])))
+        .addStage(Project({"dName": 0}))
+        .build();
+    final result = await coll.aggregateToStream(pipeline).toList();
+
+    return result.map((d) => Tarefa.fromMap(d)).toList();
   }
 
   Future<List<Disciplina>> getDisciplinas() async {
