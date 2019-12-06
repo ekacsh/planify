@@ -3,7 +3,7 @@
     "$oid": "5de97cbc3795d6e907b5d10c"
   },
   "disciplinaId": {
-    "$oid": "5de58972f3131a78a4e15c80"
+    "$oid": "5de96022968a1ed0f41c9d15"
   },
   "titulo": "Tarefa 1",
   "data": "2019-12-05 10:00:03Z",
@@ -14,7 +14,7 @@
     "$oid": "5de97cbc3795d6e907b5d10d"
   },
   "disciplinaId": {
-    "$oid": "5de58972f3131a78a4e15c80"
+    "$oid": "5de96022968a1ed0f41c9d15"
   },
   "titulo": "Tarefa 2",
   "data": "2019-12-05 10:00:03Z",
@@ -25,18 +25,18 @@
     "$oid": "5de97cbc3795d6e907b5d10e"
   },
   "disciplinaId": {
-    "$oid": "5de58972f3131a78a4e15c80"
+    "$oid": "5de96022968a1ed0f41c9d15"
   },
   "titulo": "Tarefa 3",
   "data": "2019-12-01 10:00:03Z",
-  "cor": "0x0000ffff"
+  "cor": "0xff0000ff"
 }
 {
   "_id": {
     "$oid": "5de97cbc3795d6e907b5d10f"
   },
   "disciplinaId": {
-    "$oid": "5de58972f3131a78a4e15c80"
+    "$oid": "5de96022968a1ed0f41c9d15"
   },
   "titulo": "Tarefa 4",
   "data": "2019-11-29 10:00:03Z",

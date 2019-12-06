@@ -35,7 +35,7 @@ class ApiHelper {
       let: {"id": Field('disciplinaId')},
       pipeline: [
         Match(Expr(Eq(Field("_id"), Var("id")))),
-        Project({"_id": 0, "disciplinaName": Field("titulo")})
+        Project({"_id": 0, "disciplinaNome": Field("titulo")})
       ],
       as: "dName",
     ))
