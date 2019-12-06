@@ -1,21 +1,67 @@
-import 'package:planify/models/task.dart';
+import 'package:mongo_dart/mongo_dart.dart';
+import 'package:planify/models/disciplina.dart';
+import 'package:planify/models/tarefa.dart';
 
 class ApiHelper {
-  final List<Task> tasks = [
-    Task("Tarefa 1", "Disciplina 1", DateTime.parse("2019-12-05 10:00:03Z"),
-        0xffff0000),
-    Task("Tarefa 2", "Disciplina 3", DateTime.parse("2019-12-10 10:00:03Z"),
-        0xff00ff00),
-    Task("Tarefa 3", "Disciplina 1", DateTime.parse("2019-12-01 10:00:03Z"),
-        0xff0000ff),
-    Task("Tarefa 4", "Disciplina 2", DateTime.parse("2019-11-29 10:00:03Z"),
-        0xffdddddd)
-  ];
+  static final ApiHelper instance = ApiHelper.internal();
 
-  List<Task> getMostRecent(int qnt) {
-    List<Task> _tasks;
-    _tasks.addAll(tasks);
-    _tasks.sort((a, b) => a.date.compareTo(b.date));
-    return _tasks;
+  factory ApiHelper() => instance;
+
+  ApiHelper.internal();
+
+  Db _db;
+
+  Future<Db> get db async {
+    if (_db == null) _db = await initDb();
+    return _db;
+  }
+
+  Future<Db> initDb() async {
+    String user = "user";
+    String pwd = "user";
+
+    Db db = new Db(
+        "mongodb://$user:$pwd@10.0.2.2:27001/planify?authSource=admin&retryWrites=true&w=majority");
+    await db.open();
+    return db;
+  }
+
+  Future<List<Tarefa>> getMostRecentTarefas(int qnt) async {
+    final data = await (await db)
+        .collection("tarefas")
+        .find(where.sortBy("data", descending: false))
+        .toList();
+    return data.map((d) => Tarefa.fromMap(d)).toList();
+  }
+
+  Future<List<Disciplina>> getDisciplinas() async {
+    final data = await (await db).collection("disciplinas").find().toList();
+
+    return data.map((d) => Disciplina.fromMap(d)).toList();
+  }
+
+  Future<List<Anotacao>> getAnotacoes(ObjectId disciplinaId) async {
+    final coll = (await db).collection("anotacoes");
+    final pipeline = AggregationPipelineBuilder()
+        .addStage(Lookup.withPipeline(
+      from: "disciplinas",
+      let: {"id": Field('disciplinaId')},
+      pipeline: [
+        Match(Expr(Eq(Field("_id"), Var("id")))),
+        Project({"_id": 0, "disciplinaName": Field("titulo")})
+      ],
+      as: "dName",
+    ))
+        .addStage(ReplaceRoot(
+        MergeObjects([ArrayElemAt(Field("dName"), 0), Var("ROOT")])))
+        .addStage(Project({"dName": 0}))
+        .build();
+    final result = await coll.aggregateToStream(pipeline).toList();
+    return result.map((d) => Anotacao.fromMap(d)).toList();
+  }
+
+  Future<void> saveAnotacao(Anotacao anotacao) async {
+    final coll = (await db).collection("anotacoes");
+    await coll.insert(anotacao.toMap());
   }
 }

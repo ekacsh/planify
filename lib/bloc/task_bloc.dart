@@ -1,18 +1,18 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:planify/models/task.dart';
+import 'package:planify/models/tarefa.dart';
 import 'package:planify/services/api_helper.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TaskBloc extends BlocBase {
   ApiHelper api;
 
-  List<Task> _tasks;
+  List<Tarefa> _tasks;
 
   final _searchController = BehaviorSubject<int>();
 
   Sink get inSearch => _searchController.sink;
 
-  final _tasksController = BehaviorSubject<List<Task>>.seeded([]);
+  final _tasksController = BehaviorSubject<List<Tarefa>>.seeded([]);
 
   Stream get outTasks => _tasksController.stream;
 
@@ -22,9 +22,8 @@ class TaskBloc extends BlocBase {
     _searchController.stream.listen(_loadTasks);
   }
 
-  void _loadTasks(int qnt) {
-    print(_tasks);
-    _tasks = api.getMostRecent(qnt);
+  void _loadTasks(int qnt) async {
+    _tasks = await api.getMostRecentTarefas(qnt);
     _tasksController.sink.add(_tasks);
   }
 

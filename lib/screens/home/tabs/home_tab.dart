@@ -36,7 +36,6 @@ class HomeTab extends StatelessWidget {
                               .outTasks,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              print(snapshot);
                               return ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: snapshot.data.length,

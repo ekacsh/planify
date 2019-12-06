@@ -1,5 +1,7 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
+import 'package:planify/bloc/anotacao_bloc.dart';
+import 'package:planify/bloc/subject_bloc.dart';
 import 'package:planify/bloc/task_bloc.dart';
 import 'package:planify/screens/home/home_screen.dart';
 
@@ -10,7 +12,8 @@ void main() => runApp(MaterialApp(
     home: BlocProvider(
       blocs: [
         Bloc((_) => TaskBloc()),
+        Bloc((_) => DisciplinaBloc()),
+        Bloc((_) => AnotacaoBloc()),
       ],
       child: HomeScreen(),
-    )
-));
+    )));

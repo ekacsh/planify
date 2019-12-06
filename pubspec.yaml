@@ -27,6 +27,8 @@ dependencies:
   rxdart: ^0.22.6
   intl: ^0.16.0
   flutter_calendar_carousel: ^1.4.9
+  mongo_dart: ^0.4.0
+
 
 dev_dependencies:
   flutter_test:

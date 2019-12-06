@@ -7,6 +7,7 @@ class GradeTab extends StatefulWidget {
 
 class _GradeTabState extends State<GradeTab> {
   List<Tab> _tabs = [
+    Tab(text: "Dom"),
     Tab(text: "Seg"),
     Tab(text: "Ter"),
     Tab(text: "Qua"),
@@ -25,6 +26,7 @@ class _GradeTabState extends State<GradeTab> {
             title: Text("Planify"),
             centerTitle: true,
             bottom: TabBar(
+              isScrollable: true,
               tabs: _tabs,
             ),
           ),
