@@ -1,0 +1,20 @@
+{
+  "_id": {
+    "$oid": "5de97dd3260bec6daba3b31b"
+  },
+  "disciplinaId": {
+    "$oid": "5de96022968a1ed0f41c9d15"
+  },
+  "text": "Para criar um novo processo, é utilizado a chamada de sistema 'fork'",
+  "data": "2019-12-05 10:00:03Z"
+}
+{
+  "_id": {
+    "$oid": "5de97dd3260bec6daba3b31c"
+  },
+  "disciplinaId": {
+    "$oid": "5de96022968a1ed0f41c9d15"
+  },
+  "text": "Semáforo é útil para sincronizar threads",
+  "data": "2019-12-05 10:00:03Z"
+}

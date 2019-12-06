@@ -1,0 +1,64 @@
+{
+  "_id": {
+    "$oid": "5de96022968a1ed0f41c9d15"
+  },
+  "periodo": {
+    "ano": 2019,
+    "semestre": 2
+  },
+  "titulo": "Sistemas Operacionais",
+  "docente": "Hélio Guardia",
+  "aulas": [
+    {
+      "local": "AT-5",
+      "diaSemana": 2,
+      "horarioInicio": {
+        "hora": 8,
+        "minuto": 0
+      },
+      "horarioFim": {
+        "hora": 12,
+        "minuto": 0
+      }
+    }
+  ],
+  "faltas": 4
+}
+{
+  "_id": {
+    "$oid": "5de96056968a1ed0f41c9d16"
+  },
+  "periodo": {
+    "ano": 2019,
+    "semestre": 2
+  },
+  "titulo": "Algoritmos e Estruturas de Dados 1",
+  "docente": "Diego Furtado",
+  "aulas": [
+    {
+      "local": "LE-2",
+      "diaSemana": 1,
+      "horarioInicio": {
+        "hora": 16,
+        "minuto": 0
+      },
+      "horarioFim": {
+        "hora": 18,
+        "minuto": 0
+      }
+    },
+    {
+      "local": "LE-4",
+      "diaSemana": 5,
+      "horarioInicio": {
+        "hora": 16,
+        "minuto": 0
+      },
+      "horarioFim": {
+        "hora": 18,
+        "minuto": 0
+      }
+    }
+  ],
+  "faltas": 4
+}

@@ -1,0 +1,44 @@
+{
+  "_id": {
+    "$oid": "5de97cbc3795d6e907b5d10c"
+  },
+  "disciplinaId": {
+    "$oid": "5de58972f3131a78a4e15c80"
+  },
+  "titulo": "Tarefa 1",
+  "data": "2019-12-05 10:00:03Z",
+  "cor": "0xffff0000"
+}
+{
+  "_id": {
+    "$oid": "5de97cbc3795d6e907b5d10d"
+  },
+  "disciplinaId": {
+    "$oid": "5de58972f3131a78a4e15c80"
+  },
+  "titulo": "Tarefa 2",
+  "data": "2019-12-05 10:00:03Z",
+  "cor": "0xff00ff00"
+}
+{
+  "_id": {
+    "$oid": "5de97cbc3795d6e907b5d10e"
+  },
+  "disciplinaId": {
+    "$oid": "5de58972f3131a78a4e15c80"
+  },
+  "titulo": "Tarefa 3",
+  "data": "2019-12-01 10:00:03Z",
+  "cor": "0x0000ffff"
+}
+{
+  "_id": {
+    "$oid": "5de97cbc3795d6e907b5d10f"
+  },
+  "disciplinaId": {
+    "$oid": "5de58972f3131a78a4e15c80"
+  },
+  "titulo": "Tarefa 4",
+  "data": "2019-11-29 10:00:03Z",
+  "cor": "0xff00ffff"
+}
