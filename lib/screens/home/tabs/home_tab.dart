@@ -5,11 +5,11 @@ import 'package:planify/bloc/task_bloc.dart';
 import 'package:planify/screens/home/components/task_tile.dart';
 
 class HomeTab extends StatelessWidget {
+  TaskBloc bloc;
+
   HomeTab() {
-    BlocProvider
-        .getBloc<TaskBloc>()
-        .inSearch
-        .add(5);
+    bloc = BlocProvider.getBloc<TaskBloc>();
+    bloc.inSearch.add(5);
   }
 
   @override
@@ -31,9 +31,7 @@ class HomeTab extends StatelessWidget {
                   Container(
                       height: 120,
                       child: StreamBuilder(
-                          stream: BlocProvider
-                              .getBloc<TaskBloc>()
-                              .outTasks,
+                          stream: BlocProvider.getBloc<TaskBloc>().outTasks,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               return ListView.builder(

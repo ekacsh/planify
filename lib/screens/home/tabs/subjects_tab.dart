@@ -1,16 +1,12 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
 import 'package:planify/bloc/subject_bloc.dart';
+import 'package:planify/screens/disciplina_registro/disciplina_registro.dart';
 import 'package:planify/screens/home/components/disciplina_tile.dart';
 
-
 class SubjectsTab extends StatelessWidget {
-
   SubjectsTab() {
-    BlocProvider
-        .getBloc<DisciplinaBloc>()
-        .inSearch
-        .add(null);
+    BlocProvider.getBloc<DisciplinaBloc>().inSearch.add(null);
   }
 
   @override
@@ -21,24 +17,26 @@ class SubjectsTab extends StatelessWidget {
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add, color: Colors.white,),
-        backgroundColor: Theme
-            .of(context)
-            .primaryColor,
-
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {
-
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => DisciplinaRegistro()));
         },
       ),
       body: StreamBuilder(
-        stream: BlocProvider
-            .getBloc<DisciplinaBloc>()
-            .outDisciplinas,
+        stream: BlocProvider.getBloc<DisciplinaBloc>().outDisciplinas,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ListView.separated(
                 separatorBuilder: (context, index) {
-                  return Container(color: Colors.grey, height: 1,);
+                  return Container(
+                    color: Colors.grey,
+                    height: 1,
+                  );
                 },
                 padding: EdgeInsets.all(16),
                 itemCount: snapshot.data.length + 1,
