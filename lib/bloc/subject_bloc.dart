@@ -16,6 +16,10 @@ class DisciplinaBloc extends BlocBase {
 
   Stream get outDisciplinas => _disciplinasController.stream;
 
+  final _saveDisciplinaController = BehaviorSubject<Disciplina>();
+
+  Sink get inSave => _saveDisciplinaController.sink;
+
   DisciplinaBloc() {
     api = ApiHelper();
     api.initDb();
@@ -28,10 +32,17 @@ class DisciplinaBloc extends BlocBase {
     _disciplinasController.sink.add(_disciplinas);
   }
 
+  void _save(Disciplina disciplina) {
+    api.saveDisciplina(disciplina);
+    _disciplinas.add(disciplina);
+    _disciplinasController.sink.add(_disciplinas);
+  }
+
   @override
   void dispose() {
     super.dispose();
     _searchController.close();
     _disciplinasController.close();
+    _saveDisciplinaController.close();
   }
 }
