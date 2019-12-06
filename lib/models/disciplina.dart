@@ -3,7 +3,6 @@ import 'package:mongo_dart/mongo_dart.dart';
 class Disciplina {
   ObjectId id;
   Periodo periodo;
-  String semestre;
   String titulo;
   String docente;
   List<Aula> aulas;
@@ -17,6 +16,19 @@ class Disciplina {
     aulas = map["aulas"].map<Aula>((aula) => Aula.fromMap(aula)).toList();
     faltas = map["faltas"].floor();
   }
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {
+      "periodo": periodo.toMap(),
+      "docente": docente,
+      "aulas": aulas.map((aula) => aula.toMap()),
+      "faltas": faltas
+    };
+    if (id != null) map["_id"] = id;
+    return map;
+  }
+
+
 }
 
 class Periodo {
@@ -26,6 +38,14 @@ class Periodo {
   Periodo.fromMap(Map<String, dynamic> map) {
     ano = map["ano"].floor();
     semestre = map["semestre"].floor();
+  }
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {
+      "ano": ano,
+      "semestre": semestre,
+    };
+    return map;
   }
 
   @override
@@ -42,11 +62,19 @@ class Aula {
 
   Aula.fromMap(Map<String, dynamic> map) {
     diaSemana = map["diaSemana"].floor();
-    horarioInicio = Horario(map["horarioInicio"]["hora"].floor(),
-        map["horarioInicio"]["minuto"].floor());
-    horarioFim = Horario(
-        map["horarioFim"]["hora"].floor(), map["horarioFim"]["minuto"].floor());
+    horarioInicio = Horario.fromMap(map["horarioInicio"]);
+    horarioFim = Horario.fromMap(map["horarioFim"]);
     local = map["local"];
+  }
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {
+      "diaSemana": diaSemana,
+      "horarioInicio": horarioInicio.toMap(),
+      "horarioFim": horarioFim.toMap(),
+      "local": local,
+    };
+    return map;
   }
 }
 
@@ -55,6 +83,19 @@ class Horario {
   int minuto;
 
   Horario(this.hora, this.minuto);
+
+  Horario.fromMap(Map<String, dynamic> map) {
+    hora = map["hora"].floor();
+    minuto = map["minuto"].floor();
+  }
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {
+      "hora": hora,
+      "minuto": minuto,
+    };
+    return map;
+  }
 
   @override
   String toString() {
