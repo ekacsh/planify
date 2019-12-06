@@ -23,10 +23,10 @@ class AulaBloc extends BlocBase {
     _searchController.stream.listen(_load);
   }
 
-  void _load(int qnt) async {
-    _aulas = await api.getAulas();
-    _aulasController.sink.add(_aulas);
-  }
+  // void _load(int qnt) async {
+  //   _aulas = await api.getAulas();
+  //   _aulasController.sink.add(_aulas);
+  // }
 
   @override
   void dispose() {

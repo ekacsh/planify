@@ -2,6 +2,8 @@ import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:planify/bloc/subject_bloc.dart';
+
+import 'package:planify/bloc/add_aula_bloc.dart';
 import 'package:planify/models/disciplina.dart';
 import 'package:planify/screens/disciplina_view/components/AulaTile.dart';
 
@@ -18,10 +20,17 @@ class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
   final _tituloController = TextEditingController();
   final _docentecontroller = TextEditingController();
 
+  String nome;
+  String professor;
+  int hora = 10;
   String local_temp;
   DateTime horario_temp;
 
   List<Aula> aulas = [];
+
+  ApiHelper api = ApiHelper();
+
+  AddAulaBloc bloc = BlocProvider.getBloc<AddAulaBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -86,108 +95,92 @@ class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
           ),
           InkWell(
             borderRadius: BorderRadius.all(Radius.circular(8)),
-            onTap: () {
-              setState(() {
-                aulas.add(Aula(local: "AT-9",
-                    horarioInicio: Horario(8, 0),
-                    horarioFim: Horario(10, 0),
-                    diaSemana: 1));
-              });
-//              return showDialog(
-//              context: context,
-//              builder: (context) {
-//                final _localController = TextEditingController();
-//                return AlertDialog(
-//                title: Text("Adicionar horário"),
-//                content: Column(
-//                  mainAxisSize: MainAxisSize.min,
-//                  children: <Widget>[
-//                    TextFormField(
-//                      controller: _localController,
-//                      decoration: InputDecoration(
-//                        labelText: "Local",
-//                        border: OutlineInputBorder(
-//                          borderRadius: BorderRadius.all(
-//                            Radius.circular(8),
-//                          ),
-//                          borderSide: BorderSide(color: Colors.black87),
-//                        ),
-//                        focusedBorder: OutlineInputBorder(
-//                          borderRadius: BorderRadius.all(
-//                            Radius.circular(8),
-//                          ),
-//                          borderSide:
-//                              BorderSide(color: Colors.black87, width: 2),
-//                        ),
-//                      ),
-//                    ),
-//                    SizedBox(
-//                      height: 8,
-//                    ),
-//                    Row(
-//                      children: <Widget>[
-//                        Text("Início"),
-//                        Container(
-//                          margin: EdgeInsets.only(left: 8, right: 8),
-//                          width: 70,
-//                        child:TextFormField(keyboardType: TextInputType.number,),
-//                        ),
-//                        Container(
-//                          margin: EdgeInsets.only(left: 8, right: 8),
-//                          width: 70,
-//                          child:TextFormField(keyboardType: TextInputType.number,),
-//                        ),
-////                        TextFormField(keyboardType: TextInputType.number,),
-//                      ],
-//                    ),
-//                    Row(
-//                      children: <Widget>[
-//                        Text("Fim"),
-//                        Container(
-//                          margin: EdgeInsets.only(left: 8, right: 8),
-//                          width: 70,
-//                          child:TextFormField(keyboardType: TextInputType.number,),
-//                        ),
-//                        Container(
-//                          margin: EdgeInsets.only(left: 8, right: 8),
-//                          width: 70,
-//                          child:TextFormField(keyboardType: TextInputType.number,),
-//                        ),
-////                        TextFormField(keyboardType: TextInputType.number,),
-//                      ],
-//                    ),
-////                    Row(
-////                      children: <Widget>[
-////                        Text("Fim"),
-////                        TextFormField(keyboardType: TextInputType.number,),
-////                        TextFormField(keyboardType: TextInputType.number,),
-////                      ],
-////                    )
-//                  ],
-//                ),
-//                actions: <Widget>[
-//                  FlatButton(
-//                    child: Text("Adicionar"),
-//                    onPressed: () {
-//                      setState(() {
-//                        _editedDisciplina.aulas.add(
-//                          Aula(
-//                            diaSemana: 1,
-//                            local: _localController.text,
-//                            horarioInicio: Horario(8, 0),
-//                            horarioFim: Horario(10, 0),
-//                          ),
-//                        );
-//                      });
-//                      Navigator.pop(context);
-//                    },
-//                  )
-//                ],
-//              );
-//              },
-//            );
-            },
 
+//            onTap: () {
+//              setState(() {
+//                aulas.add(Aula(local: "AT-9",
+//                    horarioInicio: Horario(8, 0),
+//                    horarioFim: Horario(10, 0),
+//                    diaSemana: 1));
+//              });
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text("Adicionar horário"),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    TextField(
+                      decoration: InputDecoration(
+                        labelText: "Local",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                          borderSide: BorderSide(color: Colors.black87),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                          borderSide:
+                              BorderSide(color: Colors.black87, width: 2),
+                        ),
+                      ),
+                      onChanged: (text) {
+                        setState(() {
+                          this.local_temp = text;
+                        });
+                      },
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text("Hora inicio"),
+                    Row(
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.remove_circle_outline),
+                          onPressed: () {
+                            bloc.decrement();
+                          },
+                        ),
+                        StreamBuilder(
+                          stream: bloc.outHour,
+                          builder: (context, snapshot) => Text(
+                              "${snapshot.data.toString().padLeft(2, '0')}:00 h"),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.add_circle_outline),
+                          onPressed: () {
+                            bloc.increment();
+                          },
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("Adicionar"),
+                    onPressed: () {
+                      setState(() {
+                        hora = bloc.getHour();
+                        aulas.add(
+                          Aula(
+                            diaSemana: 1,
+                            local: local_temp,
+                            horarioInicio: Horario(hora, 0),
+                            horarioFim: Horario(hora + 2, 0),
+                          ),
+                        );
+                      });
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              ),
+            ),
             child: Row(
               children: <Widget>[
                 Icon(Icons.add_circle_outline),

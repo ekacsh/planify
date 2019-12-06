@@ -32,16 +32,16 @@ class ApiHelper {
     final coll = (await db).collection("tarefas");
     final pipeline = AggregationPipelineBuilder()
         .addStage(Lookup.withPipeline(
-      from: "disciplinas",
-      let: {"id": Field('disciplinaId')},
-      pipeline: [
-        Match(Expr(Eq(Field("_id"), Var("id")))),
-        Project({"_id": 0, "disciplinaNome": Field("titulo")})
-      ],
-      as: "dName",
-    ))
+          from: "disciplinas",
+          let: {"id": Field('disciplinaId')},
+          pipeline: [
+            Match(Expr(Eq(Field("_id"), Var("id")))),
+            Project({"_id": 0, "disciplinaNome": Field("titulo")})
+          ],
+          as: "dName",
+        ))
         .addStage(ReplaceRoot(
-        MergeObjects([ArrayElemAt(Field("dName"), 0), Var("ROOT")])))
+            MergeObjects([ArrayElemAt(Field("dName"), 0), Var("ROOT")])))
         .addStage(Project({"dName": 0}))
         .build();
     final result = await coll.aggregateToStream(pipeline).toList();
