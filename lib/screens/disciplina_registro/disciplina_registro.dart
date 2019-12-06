@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:planify/models/disciplina.dart';
+import 'package:planify/screens/disciplina_view/components/AulaTile.dart';
+import 'package:planify/services/api_helper.dart';
 
 class DisciplinaRegistro extends StatefulWidget {
   @override
@@ -11,8 +14,10 @@ class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
   String professor;
   String local_temp;
   DateTime horario_temp;
-  List<String> locais = [];
-  List<DateTime> horarios = [];
+
+  List<Aula> aulas = [];
+
+  ApiHelper api = ApiHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -106,27 +111,10 @@ class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
                         });
                       },
                     ),
-                    MaterialButton(
-                      child: Text("Adicionar horário"),
-                      onPressed: () {
-                        showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate:
-                              DateTime.now().subtract(Duration(hours: 12)),
-                          lastDate: DateTime.now().add(Duration(hours: 12)),
-                          builder: (context, widget) => CupertinoDatePicker(
-                            use24hFormat: true,
-                            mode: CupertinoDatePickerMode.time,
-                            onDateTimeChanged: (hour) {
-                              setState(() {
-                                this.horario_temp = hour;
-                              });
-                            },
-                          ),
-                        );
-                      },
-                    )
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text("Hora inicio"),
                   ],
                 ),
                 actions: <Widget>[
@@ -134,9 +122,16 @@ class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
                     child: Text("Adicionar"),
                     onPressed: () {
                       setState(() {
-                        horarios.add(horario_temp);
-                        locais.add(local_temp);
+                        aulas.add(
+                          Aula(
+                            diaSemana: 1,
+                            local: local_temp,
+                            horarioInicio: Horario(8, 0),
+                            horarioFim: Horario(10, 0),
+                          ),
+                        );
                       });
+                      Navigator.pop(context);
                     },
                   )
                 ],
@@ -152,7 +147,27 @@ class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
               ],
             ),
           ),
+          ListView.builder(
+            physics: ClampingScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: aulas.length,
+            itemBuilder: (context, index) => AulaTile(aulas[index]),
+          ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.check),
+        onPressed: () async {
+          await api.saveDisciplina(
+            Disciplina(
+              aulas: aulas,
+              titulo: nome,
+              periodo: Periodo(2019, 2),
+              faltas: 0,
+            ),
+          );
+          Navigator.pop(context);
+        },
       ),
     );
   }

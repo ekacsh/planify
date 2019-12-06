@@ -8,6 +8,14 @@ class Disciplina {
   List<Aula> aulas;
   int faltas;
 
+  Disciplina(
+      {this.id,
+      this.periodo,
+      this.titulo,
+      this.docente,
+      this.aulas,
+      this.faltas});
+
   Disciplina.fromMap(Map<String, dynamic> map) {
     id = map["_id"];
     periodo = Periodo.fromMap(map["periodo"]);
@@ -27,13 +35,13 @@ class Disciplina {
     if (id != null) map["_id"] = id;
     return map;
   }
-
-
 }
 
 class Periodo {
   int ano;
   int semestre;
+
+  Periodo(this.ano, this.semestre);
 
   Periodo.fromMap(Map<String, dynamic> map) {
     ano = map["ano"].floor();
@@ -59,6 +67,8 @@ class Aula {
   Horario horarioInicio;
   Horario horarioFim;
   String local;
+
+  Aula({this.diaSemana, this.horarioInicio, this.horarioFim, this.local});
 
   Aula.fromMap(Map<String, dynamic> map) {
     diaSemana = map["diaSemana"].floor();
