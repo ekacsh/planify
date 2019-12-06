@@ -12,6 +12,7 @@ class DisciplinaRegistro extends StatefulWidget {
 class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
   String nome;
   String professor;
+  int hora = 10;
   String local_temp;
   DateTime horario_temp;
 
@@ -115,6 +116,27 @@ class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
                       height: 8,
                     ),
                     Text("Hora inicio"),
+                    Row(
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.remove_circle_outline),
+                          onPressed: () {
+                            setState(() {
+                              hora--;
+                            });
+                          },
+                        ),
+                        Text("${hora.toString().padLeft(2, '0')}:00 h"),
+                        IconButton(
+                          icon: Icon(Icons.add_circle_outline),
+                          onPressed: () {
+                            setState(() {
+                              hora++;
+                            });
+                          },
+                        ),
+                      ],
+                    )
                   ],
                 ),
                 actions: <Widget>[
@@ -126,8 +148,8 @@ class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
                           Aula(
                             diaSemana: 1,
                             local: local_temp,
-                            horarioInicio: Horario(8, 0),
-                            horarioFim: Horario(10, 0),
+                            horarioInicio: Horario(hora, 0),
+                            horarioFim: Horario(hora + 2, 0),
                           ),
                         );
                       });
@@ -146,6 +168,9 @@ class _DisciplinaRegistroState extends State<DisciplinaRegistro> {
                 Text("Adicionar Horário"),
               ],
             ),
+          ),
+          SizedBox(
+            height: 16,
           ),
           ListView.builder(
             physics: ClampingScrollPhysics(),
