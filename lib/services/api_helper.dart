@@ -78,4 +78,9 @@ class ApiHelper {
     final coll = (await db).collection("anotacoes");
     await coll.insert(anotacao.toMap());
   }
+
+  Future<void> saveDisciplina(Disciplina disciplina) async {
+    final coll = (await db).collection("disciplinas");
+    await coll.insert(disciplina.toMap());
+  }
 }
